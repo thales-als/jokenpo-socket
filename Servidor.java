@@ -42,7 +42,11 @@ public class Servidor {
       int jogada2 = Integer.parseInt(in2.readLine());
 
       String resultado = verificarResultado(jogada1, jogada2);
+      out1.println("O jogador 1 escolheu: " + jogada1);
+      out1.println("O jogador 2 escolheu: " + jogada2);
       out1.println("Resultado: " + resultado);
+      out2.println("O jogador 1 escolheu: " + jogada1);
+      out2.println("O jogador 2 escolheu: " + jogada2);
       out2.println("Resultado: " + resultado);
     } catch (IOException e) {
       e.printStackTrace();
