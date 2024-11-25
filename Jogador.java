@@ -2,11 +2,16 @@ import java.io.*;
 import java.net.*;
 
 public class Jogador {
-  private static final String ENDERECO_SERVIDOR = "localhost";
+  private static String enderecoServidor = "localhost";
   private static final int PORTA = 3304;
 
   public static void main(String[] args) {
-    try (Socket socket = new Socket(ENDERECO_SERVIDOR, PORTA)) {
+	  
+	if (args.length > 0) {
+		enderecoServidor = args[0];
+	}
+	  
+    try (Socket socket = new Socket(enderecoServidor, PORTA)) {
       BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
       PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
       BufferedReader console = new BufferedReader(new InputStreamReader(System.in));

@@ -21,6 +21,7 @@ public class Servidor {
       out2.println("Jogo iniciado!");
 
       jogar(jogador1, jogador2);
+
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -34,29 +35,29 @@ public class Servidor {
       PrintWriter out2 = new PrintWriter(jogador2.getOutputStream(), true);
 
       out1.println("Você é o jogador 1.");
-      out1.println("Faça sua jogada: (1 - Papel, 2 - Pedra, 3 - Tesoura)");
       out2.println("Você é o jogador 2.");
-      out2.println("Faça sua jogada: (1 - Papel, 2 - Pedra, 3 - Tesoura)");
 
-      int jogada1 = Integer.parseInt(in1.readLine());
-      int jogada2 = Integer.parseInt(in2.readLine());
+      while (true) { // Loop para rodadas contínuas
+        out1.println("Faça sua jogada: (1 - Papel, 2 - Pedra, 3 - Tesoura)");
+        out2.println("Faça sua jogada: (1 - Papel, 2 - Pedra, 3 - Tesoura)");
 
-      String resultado = verificarResultado(jogada1, jogada2);
-      out1.println("O jogador 1 escolheu: " + jogada1);
-      out1.println("O jogador 2 escolheu: " + jogada2);
-      out1.println("Resultado: " + resultado);
-      out2.println("O jogador 1 escolheu: " + jogada1);
-      out2.println("O jogador 2 escolheu: " + jogada2);
-      out2.println("Resultado: " + resultado);
+        int jogada1 = Integer.parseInt(in1.readLine());
+        int jogada2 = Integer.parseInt(in2.readLine());
+
+        String resultado = verificarResultado(jogada1, jogada2);
+
+        out1.println("O jogador 1 escolheu: " + jogada1);
+        out1.println("O jogador 2 escolheu: " + jogada2);
+        out1.println("Resultado: " + resultado);
+
+        out2.println("O jogador 1 escolheu: " + jogada1);
+        out2.println("O jogador 2 escolheu: " + jogada2);
+        out2.println("Resultado: " + resultado);
+      }
     } catch (IOException e) {
       e.printStackTrace();
     } finally {
-      try {
-        jogador1.close();
-        jogador2.close();
-      } catch (IOException e) {
-        e.printStackTrace();
-      }
+      fechaConexoes();
     }
   }
 
@@ -68,5 +69,14 @@ public class Servidor {
     } else {
       return "Jogador 2 ganhou!";
     }
+  }
+  
+  private static void fechaConexoes() {
+	  try {
+		  jogador1.close();
+		  jogador2.close();
+	  } catch (IOException e) {
+		  e.printStackTrace();
+	  }
   }
 }
