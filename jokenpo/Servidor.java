@@ -5,21 +5,22 @@ public class Servidor {
     private static final int PORTA = 3304;
     private static Socket jogador1;
     private static Socket jogador2;
+    private static boolean jogoEmAndamento = true;
 
     public static void main(String[] args) {
         try (ServerSocket serverSocket = new ServerSocket(PORTA)) {
             System.out.println("Servidor iniciado. Aguardando jogadores...");
-
+            
             jogador1 = serverSocket.accept();
             System.out.println("Jogador 1 conectado.");
             PrintWriter out1 = new PrintWriter(jogador1.getOutputStream(), true);
             out1.println("Aguardando Jogador 2...");
-
+            
             jogador2 = serverSocket.accept();
             System.out.println("Jogador 2 conectado.");
             PrintWriter out2 = new PrintWriter(jogador2.getOutputStream(), true);
             out2.println("Jogo iniciado!");
-
+            
             jogar(jogador1, jogador2);
         } catch (IOException e) {
             e.printStackTrace();
@@ -32,23 +33,24 @@ public class Servidor {
             BufferedReader in2 = new BufferedReader(new InputStreamReader(jogador2.getInputStream()));
             PrintWriter out1 = new PrintWriter(jogador1.getOutputStream(), true);
             PrintWriter out2 = new PrintWriter(jogador2.getOutputStream(), true);
-
+            
             out1.println("Você é o jogador 1.");
+            
             out2.println("Você é o jogador 2.");
 
-            while (true) { // Loop para rodadas contínuas
+            while (jogoEmAndamento) {
                 out1.println("Faça sua jogada: (1 - Papel, 2 - Pedra, 3 - Tesoura)");
                 out2.println("Faça sua jogada: (1 - Papel, 2 - Pedra, 3 - Tesoura)");
-
+                
                 int jogada1 = Integer.parseInt(in1.readLine());
                 int jogada2 = Integer.parseInt(in2.readLine());
-
+                
                 String resultado = verificarResultado(jogada1, jogada2);
-
+                
                 out1.println("O jogador 1 escolheu: " + jogada1);
                 out1.println("O jogador 2 escolheu: " + jogada2);
                 out1.println("Resultado: " + resultado);
-
+                
                 out2.println("O jogador 1 escolheu: " + jogada1);
                 out2.println("O jogador 2 escolheu: " + jogada2);
                 out2.println("Resultado: " + resultado);
@@ -56,7 +58,7 @@ public class Servidor {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            fechaConexoes();
+            fechaConexoesEEncerraJogo();
         }
     }
 
@@ -72,10 +74,11 @@ public class Servidor {
         }
     }
 
-    private static void fechaConexoes() {
+    private static void fechaConexoesEEncerraJogo() {
         try {
             if (jogador1 != null) jogador1.close();
             if (jogador2 != null) jogador2.close();
+            jogoEmAndamento = false;
         } catch (IOException e) {
             e.printStackTrace();
         }
